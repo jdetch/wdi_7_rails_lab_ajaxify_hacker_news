@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   # paths easier to generate. The `only: []` means there actually won't be any
   # top-level comment routes.
 
-  resources :comments, only: [] do
+  resources :comments, only: [:show] do
     resource :vote, only: :update, defaults: { votable_type: 'Comment' }
   end
 

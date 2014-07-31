@@ -2,27 +2,29 @@ class CommentsController < ApplicationController
   before_action :get_article_and_comments
   before_action :authenticate_user!, only: :create
 
+  respond_to :html, :json
+
   def index
     @comment = Comment.new
   end
 
   def create
     @comment = Comment.new(comment_params)
-    @comment.article = @article
+    @comment.article = @article #sets the article assoc (foreignkey)
     @comment.user = current_user
 
-    if @comment.save
-      redirect_to [@article, :comments], notice: 'Comment added!'
-    else
-      flash.now[:alert] = @comment.errors.full_messages.join(', ')
-      render :index
-    end
+    @comment.save
+    respond_with(@comment)
   end
 
   private
 
   def comment_params
     params.require(:comment).permit(:body)
+
+    # :body => requestObj
+    # params[:body]
+    # requestObj
   end
 
   def get_article_and_comments
